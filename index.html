@@ -205,47 +205,46 @@
             let price = 0;
 
             if (service === "scan") {
-                if (pages === 1) {
-                    price = 5;
-                } else if (pages === 2) {
-                    price = 8;
-                } else if (pages === 3) {
-                    price = 10;
-                } else {
-                    price = 3 * pages;
-                }
-            } else if (service === "print" || service === "photocopy") {
+                price = pages === 1 ? 2 : pages * 2;
+            } else if (service === "print") {
                 if (type === "color") {
-                    if (pages > 29) {
-                        price = 9 * 5 + 20 * 4 + (pages - 29) * 3.75;
-                    } else if (pages > 9) {
-                        price = 9 * 5 + (pages - 9) * 4;
+                    if (pages > 30) {
+                        price = 10 * 5 + 10 * 4.5 + 10 * 4 + (pages - 30) * 3.5;
+                    } else if (pages > 20) {
+                        price = 10 * 5 + 10 * 4.5 + (pages - 20) * 4;
+                    } else if (pages > 10) {
+                        price = 10 * 5 + (pages - 10) * 4.5;
                     } else {
                         price = pages * 5;
                     }
                 } else if (type === "grayscale") {
-                    if (pages > 29) {
-                        price = 1 * 5 + 4 * 2.75 + 24 * 2.6 + (pages - 29) * 2.5;
-                    } else if (pages > 5) {
-                        price = 1 * 5 + 4 * 2.75 + (pages - 5) * 2.6;
-                    } else if (pages > 1) {
-                        price = 1 * 5 + (pages - 1) * 2.75;
+                    if (pages > 40) {
+                        price = 10 * 3 + 30 * 2.5 + (pages - 40) * 2.25;
+                    } else if (pages > 10) {
+                        price = 10 * 3 + (pages - 10) * 2.5;
                     } else {
-                        price = pages * 5;
+                        price = pages * 3;
                     }
                 }
-
-                if (pages > 3 && bothSided) {
-                    price -= pages * 0.4;
-                }
-
-                // Apply dark background multiplier
-                if (documentType === "dark") {
-                    price *= 1.5;
+            } else if (service === "photocopy") {
+                if (type === "color") {
+                    price = pages * 7;
+                } else if (type === "grayscale") {
+                    price = pages * 5;
                 }
             }
 
-            document.getElementById('result').textContent = "Estimated Price: " + Math.round(price) + " Taka";
+            // Apply dark background multiplier
+            if (documentType === "dark") {
+                price *= 1.5;
+            }
+
+            // Apply discount for both sided printing
+            if (pages > 3 && bothSided && service !== 'scan') {
+                price -= pages * 0.4;
+            }
+
+            document.getElementById('result').textContent = "Estimated Total Price: " + Math.round(price) + " Taka";
         }
     </script>
 
