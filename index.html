@@ -12,27 +12,25 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f4f4f9;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             color: #333;
+            padding: 20px 0;
         }
-
         .container {
             background-color: #fff;
-            padding: 40px;
+            padding: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
             text-align: center;
             position: relative;
         }
-
         h1 {
             font-size: 32px;
             font-weight: 700;
@@ -40,7 +38,6 @@
             background: black;
             padding: 10px 0;
         }
-
         h2 {
             font-size: 18px;
             font-weight: 700;
@@ -48,7 +45,6 @@
             padding-bottom: 5px;
             margin-bottom: 15px;
         }
-
         .tagline {
             font-size: 20px;
             font-weight: normal;
@@ -58,17 +54,14 @@
             width: 100%;
             background: linear-gradient(90deg, #003344, #330033, #333300, #000000);
         }
-
         .tagline .line1 {
             font-size: 24px;
             font-weight: bold;
         }
-
         .tagline .line2 {
             font-size: 16px;
             font-weight: normal;
         }
-
         label {
             display: block;
             margin-bottom: 8px;
@@ -77,22 +70,19 @@
             color: #555;
             text-align: left;
         }
-
         input, select {
             width: 100%;
             padding: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border: 1px solid #ddd;
             font-size: 16px;
             background-color: #f9f9f9;
             transition: border-color 0.3s;
         }
-
         input:focus, select:focus {
             border-color: #007bff;
             outline: none;
         }
-
         button {
             width: 100%;
             padding: 12px;
@@ -102,38 +92,37 @@
             font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-bottom: 15px;
         }
-
         button:hover {
             background-color: #333;
         }
-
         #result {
-            margin-top: 20px;
+            margin-top: 15px;
             font-size: 22px;
             font-weight: 600;
+            margin-bottom: 15px;
         }
-
         #pages, #pagesLabel, #printOptions {
             display: none;
         }
         .whatsapp {
             text-decoration: none;
             color: #188741;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
-
     <div class="container">
         <h1>BLACK</h1>
-
         <div class="tagline">
             <div class="line1">PRINT IN COLORS</div>
             <div class="line2">WITH BLACK PRINTER</div>
         </div>
         <h2>PRINTING PRICE CALCULATOR</h2>
-
         <label for="service">Select Service:</label>
         <select id="service" onchange="togglePrintOptions()">
             <option value="" disabled selected>Select a service</option>
@@ -141,119 +130,88 @@
             <option value="print">Print</option>
             <option value="photocopy">Photocopy</option>
         </select>
-
         <div id="printOptions">
             <label for="type">Select Print Type:</label>
             <select id="type">
                 <option value="color">Color</option>
                 <option value="grayscale">Grayscale</option>
             </select>
-
-            <label for="bothSided">Select Print Option:</label>
-            <select id="bothSided">
-                <option value="oneSided">One Sided</option>
-                <option value="bothSided">Both Sided</option>
-            </select>
-
             <label for="documentType">Select Document Type:</label>
             <select id="documentType">
                 <option value="standard">Standard Document</option>
                 <option value="dark">Dark Background</option>
             </select>
         </div>
-
         <label id="pagesLabel" for="pages">Enter Total Pages:</label>
         <input type="number" id="pages" min="1" placeholder="Enter the number of pages" required>
-
         <button onclick="calculatePrice()">Calculate Price</button>
-
         <div id="result"></div>
-
-                <a href="https://wa.me/8801818330075" target="_blank" class="whatsapp">Message on WhatsApp</a>
+        <a href="https://wa.me/8801818330075" target="_blank" class="whatsapp">Message on WhatsApp</a>
     </div>
-
     <script>
         // Ensure the service dropdown resets to default on page reload
         window.onload = function() {
             document.getElementById('service').selectedIndex = 0;
             togglePrintOptions();
         }
-
+        
         function togglePrintOptions() {
             const service = document.getElementById('service').value;
             const printOptions = document.getElementById('printOptions');
             const pagesInput = document.getElementById('pages');
-            const pagesLabel = document.getElementById('pagesLabel'); // Add this to target the label
-
+            const pagesLabel = document.getElementById('pagesLabel');
+            
             // Toggle print-related options
             if (service === 'print' || service === 'photocopy') {
                 printOptions.style.display = 'block';
             } else {
                 printOptions.style.display = 'none';
             }
-
+            
             // Show "Enter Total Pages" field and its label only if a service is selected
             if (service) {
                 pagesInput.style.display = 'block';
-                pagesLabel.style.display = 'block'; // Ensure label visibility is toggled
+                pagesLabel.style.display = 'block';
             } else {
                 pagesInput.style.display = 'none';
-                pagesLabel.style.display = 'none'; // Hide the label too
+                pagesLabel.style.display = 'none';
             }
         }
-
+        
         function calculatePrice() {
             const pages = parseInt(document.getElementById('pages').value);
             const service = document.getElementById('service').value;
             const type = document.getElementById('type').value;
-            const bothSided = document.getElementById('bothSided').value === 'bothSided';
             const documentType = document.getElementById('documentType').value;
             let price = 0;
-
+            
             if (service === "scan") {
-                price = pages === 1 ? 2 : pages * 2;
+                price = pages * 2; // Consistent 2 taka per page
             } else if (service === "print") {
                 if (type === "color") {
-                    if (pages > 30) {
-                        price = 10 * 5 + 10 * 4.5 + 10 * 4 + (pages - 30) * 3.5;
-                    } else if (pages > 20) {
-                        price = 10 * 5 + 10 * 4.5 + (pages - 20) * 4;
-                    } else if (pages > 10) {
-                        price = 10 * 5 + (pages - 10) * 4.5;
-                    } else {
-                        price = pages * 5;
-                    }
+                    price = pages * 6; // 6 taka per page for color
                 } else if (type === "grayscale") {
-                    if (pages > 40) {
-                        price = 10 * 3 + 30 * 2.5 + (pages - 40) * 2.25;
-                    } else if (pages > 10) {
-                        price = 10 * 3 + (pages - 10) * 2.5;
+                    if (pages === 1) {
+                        price = 5; // 5 taka for 1 page BW
                     } else {
-                        price = pages * 3;
+                        price = pages * 4; // 4 taka per page for multiple pages BW
                     }
                 }
             } else if (service === "photocopy") {
                 if (type === "color") {
-                    price = pages * 7;
+                    price = pages * 7; // 7 taka per page for color photocopy
                 } else if (type === "grayscale") {
-                    price = pages * 5;
+                    price = pages * 5; // 5 taka per page for BW photocopy
                 }
             }
-
+            
             // Apply dark background multiplier
             if (documentType === "dark") {
                 price *= 1.5;
             }
-
-            // Apply discount for both sided printing
-            if (pages > 3 && bothSided && service !== 'scan') {
-                price -= pages * 0.4;
-            }
-
-            //document.getElementById('result').textContent = "Estimated Price: " + Math.round(price) + " Taka";
+            
             document.getElementById('result').textContent = "Estimated Price: " + Math.round(price) + " Taka";
         }
     </script>
-
 </body>
 </html>
